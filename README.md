@@ -93,6 +93,56 @@ If you wish to just develop locally and not deploy to Vercel, [follow the steps 
 
 > Check out [the docs for Local Development](https://supabase.com/docs/guides/getting-started/local-development) to also run Supabase locally.
 
+## Drizzle ORM Setup
+
+This project uses [Drizzle ORM](https://orm.drizzle.team/) for database interactions with Supabase PostgreSQL. Here's how to set it up and use it:
+
+### 1. Environment Setup
+
+Make sure your `.env.local` file includes the `DATABASE_URL` variable pointing to your Supabase PostgreSQL database:
+
+```
+DATABASE_URL=postgres://postgres:[YOUR-PASSWORD]@db.[YOUR-PROJECT-REF].supabase.co:5432/postgres
+```
+
+You can find this connection string in your Supabase project settings under Database > Connection string > URI.
+
+### 2. Database Schema
+
+The database schema is defined in the `db/schema` directory. The main tables are:
+
+- `habits`: Stores the habits that users want to track
+- `habit_entries`: Stores the daily check-ins for each habit
+
+### 3. Running Migrations
+
+To generate and run migrations:
+
+```bash
+# Generate migrations based on your schema
+npm run db:generate
+
+# Apply migrations to your database
+npm run db:migrate
+
+# (Optional) View your database with Drizzle Studio
+npm run db:studio
+```
+
+### 4. Using the API
+
+The project includes a set of API endpoints for managing habits:
+
+- `GET /api/habits` - Get all habits for the current user
+- `POST /api/habits` - Create a new habit
+- `GET /api/habits/[habitId]` - Get a specific habit with streak information
+- `PATCH /api/habits/[habitId]` - Update a habit
+- `DELETE /api/habits/[habitId]` - Archive a habit (soft delete)
+- `GET /api/habits/[habitId]/entries` - Get entries for a specific habit
+- `POST /api/habits/[habitId]/entries` - Create or update a habit entry
+
+A client-side utility is available in `utils/api-client.ts` to interact with these endpoints.
+
 ## Feedback and issues
 
 Please file feedback and issues over on the [Supabase GitHub org](https://github.com/supabase/supabase/issues/new/choose).

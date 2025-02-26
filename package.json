@@ -3,7 +3,11 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "lint": "next lint",
+    "db:generate": "cross-env NODE_OPTIONS='--loader ts-node/esm --no-warnings' drizzle-kit generate",
+    "db:migrate": "tsx db/migrate.ts",
+    "db:studio": "drizzle-kit studio"
   },
   "dependencies": {
     "@radix-ui/react-checkbox": "^1.1.1",
@@ -14,9 +18,11 @@
     "@supabase/supabase-js": "latest",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "drizzle-orm": "^0.40.0",
     "lucide-react": "^0.468.0",
     "next": "latest",
     "next-themes": "^0.4.3",
+    "postgres": "^3.4.3",
     "prettier": "^3.3.3",
     "react": "19.0.0",
     "react-dom": "19.0.0"
@@ -24,12 +30,19 @@
   "devDependencies": {
     "@tailwindcss/postcss": "^4.0.9",
     "@types/node": "22.10.2",
+    "@types/pg": "^8.11.11",
     "@types/react": "^19.0.10",
     "@types/react-dom": "19.0.2",
+    "cross-env": "^7.0.3",
+    "dotenv": "^16.4.7",
+    "drizzle-kit": "^0.30.5",
+    "eslint": "9.21.0",
+    "eslint-config-next": "15.1.7",
     "postcss": "8.4.49",
     "tailwind-merge": "^2.5.2",
     "tailwindcss": "^4.0.9",
     "tailwindcss-animate": "^1.0.7",
+    "tsx": "^4.19.3",
     "typescript": "5.7.2"
   }
 }
