@@ -17,7 +17,6 @@ export interface HabitEntry {
   userId: string;
   date: string;
   completed: boolean;
-  notes: string | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -30,9 +29,9 @@ export interface HabitWithStreak extends Habit {
 export const api = {
   // Habits
   async getHabits(): Promise<Habit[]> {
-    const response = await fetch('/api/habits');
+    const response = await fetch("/api/habits");
     if (!response.ok) {
-      throw new Error('Failed to fetch habits');
+      throw new Error("Failed to fetch habits");
     }
     const data = await response.json();
     return data.habits;
@@ -41,40 +40,46 @@ export const api = {
   async getHabit(habitId: number): Promise<HabitWithStreak> {
     const response = await fetch(`/api/habits/${habitId}`);
     if (!response.ok) {
-      throw new Error('Failed to fetch habit');
+      throw new Error("Failed to fetch habit");
     }
     const data = await response.json();
     return {
       ...data.habit,
-      streak: data.streak
+      streak: data.streak,
     };
   },
 
-  async createHabit(habit: { name: string; description?: string }): Promise<Habit> {
-    const response = await fetch('/api/habits', {
-      method: 'POST',
+  async createHabit(habit: {
+    name: string;
+    description?: string;
+  }): Promise<Habit> {
+    const response = await fetch("/api/habits", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(habit),
     });
     if (!response.ok) {
-      throw new Error('Failed to create habit');
+      throw new Error("Failed to create habit");
     }
     const data = await response.json();
     return data.habit;
   },
 
-  async updateHabit(habitId: number, habit: { name?: string; description?: string }): Promise<Habit> {
+  async updateHabit(
+    habitId: number,
+    habit: { name?: string; description?: string }
+  ): Promise<Habit> {
     const response = await fetch(`/api/habits/${habitId}`, {
-      method: 'PATCH',
+      method: "PATCH",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(habit),
     });
     if (!response.ok) {
-      throw new Error('Failed to update habit');
+      throw new Error("Failed to update habit");
     }
     const data = await response.json();
     return data.habit;
@@ -82,47 +87,53 @@ export const api = {
 
   async archiveHabit(habitId: number): Promise<void> {
     const response = await fetch(`/api/habits/${habitId}`, {
-      method: 'DELETE',
+      method: "DELETE",
     });
     if (!response.ok) {
-      throw new Error('Failed to archive habit');
+      throw new Error("Failed to archive habit");
     }
   },
 
   // Habit Entries
-  async getHabitEntries(habitId: number, startDate?: Date, endDate?: Date): Promise<HabitEntry[]> {
+  async getHabitEntries(
+    habitId: number,
+    startDate?: Date,
+    endDate?: Date
+  ): Promise<HabitEntry[]> {
     let url = `/api/habits/${habitId}/entries`;
     const params = new URLSearchParams();
-    
+
     if (startDate) {
-      params.append('startDate', startDate.toISOString());
+      params.append("startDate", startDate.toISOString());
     }
-    
+
     if (endDate) {
-      params.append('endDate', endDate.toISOString());
+      params.append("endDate", endDate.toISOString());
     }
-    
+
     if (params.toString()) {
       url += `?${params.toString()}`;
     }
-    
+
     const response = await fetch(url);
     if (!response.ok) {
-      throw new Error('Failed to fetch habit entries');
+      throw new Error("Failed to fetch habit entries");
     }
     const data = await response.json();
     return data.entries;
   },
 
-  async updateHabitEntry(habitId: number, entry: { 
-    date: Date; 
-    completed: boolean; 
-    notes?: string 
-  }): Promise<HabitEntry> {
+  async updateHabitEntry(
+    habitId: number,
+    entry: {
+      date: Date;
+      completed: boolean;
+    }
+  ): Promise<HabitEntry> {
     const response = await fetch(`/api/habits/${habitId}/entries`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         ...entry,
@@ -130,7 +141,7 @@ export const api = {
       }),
     });
     if (!response.ok) {
-      throw new Error('Failed to update habit entry');
+      throw new Error("Failed to update habit entry");
     }
     const data = await response.json();
     return data.entry;

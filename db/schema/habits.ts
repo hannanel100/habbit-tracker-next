@@ -13,7 +13,6 @@ import {
 export const habits = pgTable("habits", {
   id: serial("id").primaryKey(),
   name: varchar("name", { length: 255 }).notNull(),
-  description: text("description"),
   userId: uuid("user_id").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),

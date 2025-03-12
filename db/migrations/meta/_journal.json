@@ -8,6 +8,13 @@
       "when": 1740579709438,
       "tag": "0000_even_mother_askani",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1740584273797,
+      "tag": "0001_bitter_wonder_man",
+      "breakpoints": true
     }
   ]
 }

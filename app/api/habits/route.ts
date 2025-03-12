@@ -42,7 +42,6 @@ export async function POST(request: NextRequest) {
     // Create new habit
     const newHabit = await habits.createHabit({
       name: body.name,
-      description: body.description || null,
       userId: user.id,
       isArchived: false
     });

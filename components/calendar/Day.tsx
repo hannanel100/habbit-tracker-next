@@ -3,16 +3,56 @@ import { useState } from "react";
 
 interface DayProps {
   date: number;
+  monthIndex: number;
+  habitId?: number;
+  completed?: boolean;
+  entryId?: number;
 }
 
-export const Day = ({ date }: DayProps) => {
-  const [isOn, setIsOn] = useState(false);
+export const Day = ({ date, monthIndex, habitId, completed = false, entryId }: DayProps) => {
+  const [isOn, setIsOn] = useState(completed);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleToggle = async () => {
+    if (!habitId) return;
+    
+    try {
+      setIsLoading(true);
+      
+      // Create the date for this day
+      const currentYear = new Date().getFullYear();
+      const entryDate = new Date(currentYear, monthIndex, date);
+      
+      // Call the API to update the habit entry
+      const response = await fetch('/api/habit-entries', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          habitId,
+          date: entryDate.toISOString(),
+          completed: !isOn,
+        }),
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to update habit entry');
+      }
+      
+      setIsOn(!isOn);
+    } catch (error) {
+      console.error('Error updating habit entry:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div className="relative p-1">
       <div
         className={`w-12 h-14 relative cursor-pointer overflow-hidden
-          flex items-center justify-center transition-all duration-300`}
+          flex items-center justify-center transition-all duration-300 ${isLoading ? 'opacity-70' : ''}`}
         style={{
           clipPath: "polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)",
           background: isOn 
@@ -22,7 +62,7 @@ export const Day = ({ date }: DayProps) => {
             ? "inset 0 0 15px rgba(0,0,0,0.6), inset 0 0 5px rgba(251, 191, 36, 0.5)"
             : "inset 0 0 10px rgba(0,0,0,0.8)"
         }}
-        onClick={() => setIsOn(!isOn)}
+        onClick={habitId ? handleToggle : undefined}
       >
         {/* Inner border */}
         <div 
@@ -68,6 +108,13 @@ export const Day = ({ date }: DayProps) => {
             opacity: 0.4
           }}
         />
+        
+        {/* Loading indicator */}
+        {isLoading && (
+          <div className="absolute inset-0 flex items-center justify-center bg-black/20 z-20">
+            <div className="w-4 h-4 border-2 border-amber-200 border-t-transparent rounded-full animate-spin"></div>
+          </div>
+        )}
       </div>
     </div>
   );

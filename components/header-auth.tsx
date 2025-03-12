@@ -54,6 +54,9 @@ export default async function AuthButton() {
       <Link href="/protected/calendar" className="hover:underline">
         Calendar
       </Link>
+      <Link href="/protected/habits/new" className="hover:underline">
+        Add Habit
+      </Link>
       <Link href="/protected" className="hover:underline">
         Dashboard
       </Link>
